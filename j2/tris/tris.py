@@ -16,8 +16,41 @@ def recherche_dichotomique(lst: list, x) -> int:
     Piège classique : avec des doublons, s'arrêter au premier x trouvé ne donne pas
     forcément la première occurrence.
     """
-    raise NotImplementedError
+    low = 0
+    high = len(lst) - 1
 
+    pos = -1
+
+    while low <= high:
+        middle = (low + high) // 2
+
+        if lst[middle] == x:
+            pos = middle
+            high = middle - 1
+        
+        elif lst[middle] < x:
+            low = middle + 1
+            
+        else:
+            high = middle - 1
+
+    return pos
+
+def fusion(gauche, droite):
+
+    resultat = []
+    i = 0
+    j = 0
+
+    while i < len(gauche) and j < len(droite):
+        # Comparer gauche[i] et droite[j]
+        # Ajouter le plus petit
+        # Avancer le bon indice
+        pass
+
+    # Ajouter les éléments restants
+
+    return resultat
 
 def tri_fusion(lst: list) -> list:
     """Renvoie une NOUVELLE liste triée. O(n log n), STABLE.
