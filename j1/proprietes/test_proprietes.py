@@ -12,6 +12,7 @@ On vérifie que ta version rapide donne TOUJOURS le même résultat.
 from hypothesis import given, strategies as st
 
 from j1.lab import versions_naives as naif
+from j1.lab import structures as opti
 
 
 # --- EXEMPLE COMPLET -------------------------------------------------------
@@ -26,18 +27,23 @@ import pytest  # noqa: E402
 
 A_FAIRE = pytest.mark.skip(reason="exercice à compléter")
 
+PETITS_MOTS = st.lists(st.sampled_from(["a", "b", "c", "d"]), max_size=40)
 
-@A_FAIRE
-def test_doublons_comme_oracle(s):
-    # Indice : st.lists(st.sampled_from(["a", "b", "c", "d"])) produit beaucoup de doublons.
-    pass
+@given(PETITS_MOTS)
+def test_doublons_comme_oracle(emails):
+    assert naif.doublons(emails) == opti.doublons(emails)
 
 
-@A_FAIRE
-def test_doublons_proprietes(s):
-    # Propriétés sans oracle : le résultat n'a pas de répétition,
+@given(PETITS_MOTS)
+def test_doublons_proprietes(emails, s):
+    resultat = s.doublons(emails)
+    assert len(resultat) == len(set(emails))
+    # ['a', 'a', 'b', 'c', 'e', 'e']
+    # => resultat = ['a', 'e']
+
     # et chaque élément du résultat apparaît au moins 2 fois dans l'entrée.
-    pass
+    for res in resultat:
+        assert emails.count(res) >= 2
 
 
 @A_FAIRE
