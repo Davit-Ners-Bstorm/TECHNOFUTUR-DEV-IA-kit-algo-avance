@@ -37,20 +37,23 @@ def recherche_dichotomique(lst: list, x) -> int:
     return pos
 
 def fusion(gauche, droite):
-
     resultat = []
     i = 0
     j = 0
 
     while i < len(gauche) and j < len(droite):
-        # Comparer gauche[i] et droite[j]
-        # Ajouter le plus petit
-        # Avancer le bon indice
-        pass
+        if gauche[i] > droite[j]:
+            resultat.append(droite[j])
+            j += 1
+        else:
+            resultat.append(gauche[i])
+            i += 1
 
-    # Ajouter les éléments restants
+    resultat.extend(gauche[i:])
+    resultat.extend(droite[j:])
 
     return resultat
+
 
 def tri_fusion(lst: list) -> list:
     """Renvoie une NOUVELLE liste triée. O(n log n), STABLE.
@@ -59,18 +62,58 @@ def tri_fusion(lst: list) -> list:
     Indice : couper en deux, trier chaque moitié, fusionner. Dans la fusion, en cas
     d'égalité, prendre d'abord l'élément de la moitié GAUCHE.
     """
-    raise NotImplementedError
 
+    if len(lst) <= 1:
+        # print(f"############### DERNIERE RECURSION ({lst})")
+        return lst
+
+    mid = len(lst) // 2
+
+    # print(f"***** DIVISION gauche droite de {lst} = {lst[:mid]} et {lst[mid:]}")
+    
+    gauche = tri_fusion(lst[:mid])
+    droite = tri_fusion(lst[mid:])
+
+    # print(gauche, droite)
+
+    return fusion(gauche, droite)
+
+# print(tri_fusion([4, 5, 8, 2]))
+
+
+import random
 
 def tri_rapide(lst: list) -> list:
     """Renvoie une NOUVELLE liste triée. O(n log n) en moyenne.
+    [5, 2, 6, 8, 4]
+
 
     Deux pièges testés :
       - une liste DÉJÀ triée ne doit pas faire exploser le temps → pivot aléatoire ;
       - une liste avec beaucoup de DOUBLONS non plus → partition en trois
         (plus petits / égaux / plus grands).
     """
-    raise NotImplementedError
+
+    if len(lst) <= 1:
+        return lst
+
+    pivot = random.choice(lst)
+
+    petits = []
+    egaux = []
+    grands = []
+
+    for elem in lst:
+        if elem < pivot:
+            petits.append(elem)
+        elif elem > pivot:
+            grands.append(elem)
+        else:
+            egaux.append(elem)
+    
+    return tri_rapide(petits) + egaux + tri_rapide(grands)
+
+# print(tri_rapide([8, 9, 5, 26, 1, 3, 4, 98, 65, 13]))
 
 
 def top_k(valeurs, k: int) -> list:
