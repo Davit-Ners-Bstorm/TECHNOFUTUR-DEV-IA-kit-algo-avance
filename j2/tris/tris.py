@@ -115,15 +115,37 @@ def tri_rapide(lst: list) -> list:
 
 # print(tri_rapide([8, 9, 5, 26, 1, 3, 4, 98, 65, 13]))
 
+import heapq
 
 def top_k(valeurs, k: int) -> list:
+    # [1, 5, 3, 8, 9, 46, 85, 2] - 3
+    # [5, 4, 6, 8, 16]
     """Les k plus grandes valeurs, de la plus grande à la plus petite. O(n log k).
 
     Interdit : trier toutes les valeurs. Indice : garder un tas de taille k
     qui contient les k meilleures vues jusqu'ici (heappush / heappushpop).
     `valeurs` peut être un itérateur : on ne peut le parcourir qu'une fois.
     """
-    raise NotImplementedError
+
+    if k < 1:
+        return []
+
+    resultats = []
+
+    for x in valeurs:
+        if len(resultats) < k:
+            heapq.heappush(resultats, x)
+        else:
+            heapq.heappushpop(resultats, x)
+
+    sorted_resultat = []
+
+    while resultats:
+        sorted_resultat.append(heapq.heappop(resultats))
+
+    return sorted_resultat[::-1]
+
+# print(top_k([5, 8, 9, 13, 65, 45, 2, 1, 3, 54, 65, 98], 10))
 
 
 def fusion_k_listes(listes: list[list]) -> list:
