@@ -21,6 +21,8 @@ La version « boucles imbriquées » est dans j2/versions_naives.py : c'est votr
     uv run python -m j2.jointures.comparer_sql
 """
 
+# clients = [(1, "Alice", "Namur"), (2, "Bruno", "Mons")]
+# commandes = [(10, 2, 50.0), (11, 1, 20.0), (12, 3, 9.0), (13, None, 1.0)]
 
 def jointure_hachage(clients: list[tuple], commandes: list[tuple]) -> list[tuple]:
     """Hash join. Objectif O(n + m).
@@ -28,7 +30,31 @@ def jointure_hachage(clients: list[tuple], commandes: list[tuple]) -> list[tuple
     Phase 1 (build) : un dict id → liste des noms, construit sur la PLUS PETITE table.
     Phase 2 (probe) : on parcourt l'autre table et on cherche chaque clé dans le dict.
     """
-    raise NotImplementedError
+
+    client_index = dict()
+
+    for id, nom, ville in clients:
+        if id is None:
+            continue
+
+        if id not in client_index:
+            client_index[id] = []
+
+        client_index[id].append(nom)
+
+    resultat = []
+
+    for commande_id, client_id, prix in commandes:
+        if client_id in client_index:
+            for nom in client_index[client_id]:
+                resultat.append((nom, client_id, commande_id, prix))
+
+    return resultat
+
+# print(jointure_hachage([(1, "Alice", "Namur"), (2, "Bruno", "Mons")], [(10, 2, 50.0), (11, 1, 20.0), (12, 3, 9.0), (13, None, 1.0)]))
+            
+
+
 
 
 def jointure_tri_fusion(clients: list[tuple], commandes: list[tuple]) -> list[tuple]:

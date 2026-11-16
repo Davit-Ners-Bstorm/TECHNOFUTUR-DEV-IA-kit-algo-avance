@@ -147,6 +147,8 @@ def top_k(valeurs, k: int) -> list:
 
 # print(top_k([5, 8, 9, 13, 65, 45, 2, 1, 3, 54, 65, 98], 10))
 
+print(list(heapq.merge([1, 3, 5], [5, 6, 8], [5, 10, 63])))
+
 
 def fusion_k_listes(listes: list[list]) -> list:
     """BONUS — fusionne k listes déjà triées en une liste triée. O(n log k).
