@@ -52,7 +52,6 @@ def jointure_hachage(clients: list[tuple], commandes: list[tuple]) -> list[tuple
     return resultat
 
 # print(jointure_hachage([(1, "Alice", "Namur"), (2, "Bruno", "Mons")], [(10, 2, 50.0), (11, 1, 20.0), (12, 3, 9.0), (13, None, 1.0)]))
-            
 
 
 
@@ -65,7 +64,49 @@ def jointure_tri_fusion(clients: list[tuple], commandes: list[tuple]) -> list[tu
     Piège : quand la même clé apparaît plusieurs fois des deux côtés, il faut produire
     TOUTES les combinaisons. Pensez « groupe de clés égales ».
     """
-    raise NotImplementedError
+
+    clients_sorted = sorted((c for c in clients if c[0] is not None), key= lambda c: c[0])
+    commandes_sorted = sorted((c for c in commandes if c[1] is not None), key= lambda c: c[1])
+
+    i = 0
+    j = 0
+
+    resultat = []
+
+    while i < len(clients_sorted) and j < len(commandes_sorted):
+        client_id = clients_sorted[i][0]
+        commande_client_id = commandes_sorted[j][1]
+
+        if client_id < commande_client_id:
+            i += 1
+
+        elif client_id > commande_client_id:
+            j += 1
+
+        else:
+            groupe_client = []
+
+            while i < len(clients_sorted) and clients_sorted[i][0] == client_id:
+                groupe_client.append(clients_sorted[i])
+                i += 1
+
+            groupe_commandes = []
+
+            while j < len(commandes_sorted) and commandes_sorted[j][1] == client_id:
+                groupe_commandes.append(commandes_sorted[j])
+                j += 1
+
+            for cl in groupe_client:
+                for co in groupe_commandes:
+                    resultat.append(
+                        (cl[1],
+                        co[0],
+                        co[2])
+                    )
+    return resultat
+
+# print(jointure_tri_fusion([(1, "Alice", "Namur"), (None, "Alice", "Namur"), (2, "Bruno", "Mons"), (2, "Test", "Mons")], [(1, 2, 50.0), (18, 2, 26), (11, 1, 20.0), (12, 3, 9.0), (13, None, 1.0)]))
+    
 
 
 def jointure_gauche(clients: list[tuple], commandes: list[tuple]) -> list[tuple]:
