@@ -13,13 +13,22 @@ Posez-vous la question : « mon appel récursif travaille-t-il sur un problème 
 
 # ============================================================ SOCLE
 def somme_chiffres(n: int) -> int:
-    """somme_chiffres(1234) == 10. n >= 0. Récursif, sans str()."""
-    raise NotImplementedError
+    if n == 0:
+        return 0
+
+    return n % 10 + somme_chiffres(n // 10)
 
 
 def aplatir(liste: list) -> list:
     """aplatir([1, [2, [3, 4]], 5]) == [1, 2, 3, 4, 5]."""
-    raise NotImplementedError
+    res = []
+
+    for elem in liste:
+        if isinstance(elem, list):
+            res.extend(aplatir(elem))
+        else:
+            res.append(elem)
+    return res
 
 
 def puissance_rapide(x: float, n: int) -> float:
@@ -27,7 +36,12 @@ def puissance_rapide(x: float, n: int) -> float:
 
     Indice : x^10 = (x^5)², et x^5 = x × x^4.
     """
-    raise NotImplementedError
+    if n == 0:
+        return 1
+
+    moitie = puissance_rapide(x, n // 2)
+
+    return moitie * moitie * (1 if n % 2 == 0 else x)
 
 
 # ============================================================ STANDARD
