@@ -92,6 +92,7 @@ def fib_memo(n):
 # print(fib_memo(300))
 
 from functools import cache
+import unicodedata
 
 @cache
 def fib_cache_natif(n):
@@ -100,4 +101,22 @@ def fib_cache_natif(n):
 
     return fib_cache_natif(n - 1) + fib_cache_natif(n - 2)
 
-print(fib_cache_natif(900))
+# print(fib_cache_natif(900))
+
+def fib_tab(n):
+    a = 0 # 1
+    b = 1 # 2
+
+    for _ in range(n):
+        a, b = b, a + b
+
+    return a
+
+# print(fib_tab(50))
+# print(fib_cache_natif(50))
+
+# A : 2kg - 3e
+# B : 3kg - 4e
+# C : 4kg - 5e
+
+# sac : 5kg

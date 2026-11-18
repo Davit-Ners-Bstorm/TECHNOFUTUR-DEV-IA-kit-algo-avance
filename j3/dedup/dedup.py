@@ -24,7 +24,13 @@ def normaliser(texte: str) -> str:
     Indice : unicodedata.normalize("NFD", …) sépare la lettre de son accent ;
     l'accent a la catégorie Unicode "Mn".
     """
-    raise NotImplementedError
+    sans_accents = "".join(l for l in unicodedata.normalize('NFD', texte) 
+                            if unicodedata.category(l) != "Mn")
+
+    for sep in "-'":
+        sans_accents = sans_accents.replace(sep, " ")
+
+    return " ".join(sans_accents.lower().split())
 
 
 def levenshtein(a: str, b: str) -> int:
@@ -34,12 +40,50 @@ def levenshtein(a: str, b: str) -> int:
     la distance entre a[:i] et b[:k]. Objectif O(len(a) × len(b)).
     Bonus mémoire : ne garder que deux lignes du tableau.
     """
-    raise NotImplementedError
+    lignes = len(a) + 1
+    colonnes = len(b) + 1
+
+    tab_dp = [[0] * colonnes for _ in range(lignes)]
+
+    for i in range(lignes):
+        tab_dp[i][0] = i
+
+    for i in range(colonnes):
+        tab_dp[0][i] = i
+
+    for i in range(1, lignes):
+        for j in range(1, colonnes):
+            cout = 0
+
+            if a[i - 1] != b[j - 1]:
+                cout = 1
+
+            suppression = tab_dp[i - 1][j] + 1
+            insertion = tab_dp[i][j - 1] + 1
+            replacement = tab_dp[i - 1][j - 1] + cout
+
+            tab_dp[i][j] = min(suppression, insertion, replacement)
+    for l in tab_dp:
+        print(l)
+
+    return tab_dp[-1][-1]
+
+levenshtein('chat', 'chien')
 
 
 def similarite(a: str, b: str) -> float:
     """1 - distance / longueur de la plus longue chaîne. Deux chaînes vides : 1.0."""
-    raise NotImplementedError
+    longueur = max(len(a), len(b))
+
+    if longueur == 0:
+        return 1.0
+
+    distance = levenshtein(a, b)
+
+    return 1 - distance / longueur
+
+
+
 
 
 def cle_bloc(client: dict) -> str:
